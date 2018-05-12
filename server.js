@@ -2,7 +2,8 @@
   var app = express();
   var server = require('http').createServer(app);
   var io = require('socket.io')(server);
-  var bid_price = "1000"
+  var bid_price = 1000;
+  var next_bid = bid_price+(bid_price*0.1);
 
   app.get('/', function(req, res, next) {
   	res.sendFile(__dirname + '/public/index.html')
@@ -15,13 +16,15 @@
 
   	client.on('join', function(data) {
   		console.log(data);
-  		client.emit('initiate', bid_price)
+  		client.emit('initiate', { old:bid_price, new:next_bid })
   	});
 
   	client.on('bid', function(data){
-  		bid_price = data;
-  		client.emit('update', data);
-  		client.broadcast.emit('update', data);
+  		console.log(data);
+  		bid_price = Number(data);
+  		next_bid = bid_price+(bid_price*0.1);
+  		client.emit('update', { old:bid_price, new:next_bid });
+  		client.broadcast.emit('update', { old:bid_price, new:next_bid });
   	});
   });
 
