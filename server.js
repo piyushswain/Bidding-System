@@ -4,7 +4,7 @@
   var io = require('socket.io')(server);
   var bid_price = 1000;
   var next_bid = bid_price+(bid_price*0.1);
-
+  var start_timer = 0;
   app.get('/', function(req, res, next) {
   	res.sendFile(__dirname + '/public/index.html')
   });
@@ -22,7 +22,7 @@
   	client.on('bid', function(data){
   		console.log(data);
   		bid_price = Number(data);
-  		next_bid = bid_price+(bid_price*0.1);
+  		next_bid = Math.round(bid_price+(bid_price*0.1));
   		client.emit('update', { old:bid_price, new:next_bid });
   		client.broadcast.emit('update', { old:bid_price, new:next_bid });
   	});
