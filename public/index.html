@@ -1,0 +1,51 @@
+ <html>  
+    <head>
+      <title> Bidding </title>
+    </head>
+    <body>
+        <h1> Item 1 : </h1>
+        <p id="bid_val"></p>
+        <form>
+            <input id="new_bid" type="text" placeholder="New Bid Value">
+            <input type="submit" value="Send">
+        </form>
+
+        <ul id="thread"></ul>
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+        <script src="/socket.io/socket.io.js"></script>
+
+        <script>
+            
+            var socket = io.connect('http://localhost:3000');
+            socket.on('connect', function(data) {
+                socket.emit('join', 'Hello server from client');
+            });
+
+            socket.on('initiate', function(data){
+                $("p").text( data );
+            });
+
+            socket.on('update', function(data) {
+                bid_price = data;
+                $("p").text( data );
+            });
+
+            
+            $('form').submit(function() {
+                var new_bid = Number($('#new_bid').val());
+                var old_bid = Number(document.getElementById("bid_val").innerHTML);
+                if(new_bid < old_bid){
+                    window.alert("New Bid Smaller than Current Bid");
+                    $('#new_bid').val('');
+                }
+                else{
+                    socket.emit('bid', new_bid);
+                    $('#new_bid').val('');
+                }
+                return false;
+            });
+        </script>  
+    </body>
+ </html>  
