@@ -3,24 +3,32 @@
       <title> Bidding </title>
     </head>
     <body>
-        <h1> Item 1 : </h1>
-        <p id="bid_val"></p>
-        <form>
-            <a>Next Bid :</a><p id="new_bid"></p>
-            <input type="submit" value="Send">
-        </form>
+        <div id="Bids">
+            <h1> Item 1 : </h1>
+            <p id="bid_val"></p>
+        </div>
 
-        <ul id="thread"></ul>
+        <div id="New_Bids">
+            <form id="send">
+                <a>Next Bid :</a><p id="new_bid"></p>
+                <input type="submit" id ="button" value="Send">
+            </form>
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
         <script src="/socket.io/socket.io.js"></script>
 
         <script>
-            
+            var client_id;
             var socket = io.connect('http://localhost:3000');
+
             socket.on('connect', function(data) {
-                socket.emit('join', 'Hello server from client');
+                socket.emit('join', "Connected to Server");
+            });
+
+            socket.on('assign', function(data){
+                client_id = data;
             });
 
             socket.on('initiate', function(data){
@@ -28,18 +36,26 @@
                 $("#new_bid").text( data.new );
             });
 
+
             socket.on('update', function(data) {
                 $("#bid_val").text( data.old );
                 $("#new_bid").text( data.new );
             });
 
-            
-            $('form').submit(function() {
+            socket.on('end', function(data){
+                if(client_id == data)
+                    window.alert('Bidding Ended\nCongrats You Won The Bidding');
+                else
+                    window.alert('Bidding Ended\nSorry You Lost The Bidding');
+            })    
+
+            $('#send').submit(function() {
                 var new_bid = Number(document.getElementById("new_bid").innerHTML);
                 $('#new_bid').val('');
-                socket.emit('bid', new_bid);
+                socket.emit('bid', {bid:new_bid, c_id:client_id});
                 return false;
             });
+
         </script>  
     </body>
  </html>  
