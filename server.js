@@ -7,12 +7,12 @@
   var emitter = new events.EventEmitter();
   
 //Functional Variables
-  var bid_price = 500;
-  var next_bid = bid_price+(bid_price*0.1);
-  var bid_start = false;
-  var time = 60;
-  var timer;
-  var highest_bidder;
+  var bid_price = 500;							//Bid Start Value
+  var next_bid = bid_price+(bid_price*0.1);		//Initial Next Bid Value (10% increment) 
+  var bid_start = false;						//Flag for Timer
+  var time = 60;								//Time Limit for Bidding (sec)
+  var timer;									//Interval Function Variable
+  var highest_bidder;							//Variable to store Client Id of highest bidder
 
   function startBid(){
   timer = setInterval(function(){
@@ -38,7 +38,7 @@
 
   	client.on('join', function(data) {
   		console.log(data);
-  		client.emit('initiate', { old:bid_price, new:next_bid})
+  		client.emit('initiate', { old:bid_price, new:next_bid, time:time, flag:bid_start})
   	});
 
   	client.on('bid', function(data){
@@ -50,8 +50,8 @@
   		highest_bidder = data.c_id;
   		bid_price = Number(data.bid);
   		next_bid = Math.round(bid_price+(bid_price*0.1));
-  		client.emit('update', { old:bid_price, new:next_bid });
-  		client.broadcast.emit('update', { old:bid_price, new:next_bid });
+  		client.emit('update', { old:bid_price, new:next_bid, time:time, flag:bid_start});
+  		client.broadcast.emit('update', { old:bid_price, new:next_bid, time:time, flag:bid_start});
   	});
 
   	emitter.on('end',function(){
