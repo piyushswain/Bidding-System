@@ -1,87 +1,47 @@
  <html>  
     <head>
       <title> Bidding </title>
+
+      <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet"> 
+      <link href="https://fonts.googleapis.com/css?family=Patua+One" rel="stylesheet">
+      <link rel="stylesheet" href="/css/style.css">
+
     </head>
     <body>
-        <div id="Bids">
-            <h1> Item 1 : </h1>
-            <p id="bid_val"></p>
+        <div class = "product_name">
+            <h1 id = "p_name">One Plus 6</h1>
         </div>
 
-        <div id="New_Bids">
-            <form id="send">
-                <a>Next Bid :</a><p id="new_bid"></p>
-                <input type="submit" id ="button" value="Send">
-                <p id="time"></p>
-            </form>
-        </div>
+        <hr>
+
+        <section class="bid_body">
+            
+            <div class = "product_image">
+                <img src = "images/oneplus_6.png" id = "p_img">
+            </div>
+
+            <div class = "product_desc">
+
+                <h2>Description</h2>
+                <br><br>
+                <p>New OnePlus 6.<br>Pre-Release Version, Unboxed.<br>A big screen, a refreshed and modernized design, the latest processor from Qualcomm, upgraded cellular capabilities, an improved camera system, and the best version of Android outside of Google’s own Pixel line</p>
+                <br><br>
+                <form id="send">
+                    <span class = "rs" id = "old">₹ </span><span id="bid_val"></span>
+                    <br><br>
+                    <span id ="next">Next Bid : </span><span class = "rs" id = "new">₹ </span><span id="new_bid"></span>
+                    <br>
+                    <input type="submit" id ="button" value="Place Bid">
+                    <p id="time"></p>
+                </form>
+            
+            </div>
+        </section>
 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
         <script src="/socket.io/socket.io.js"></script>
 
-        <script>
-            var client_id;
-            var socket = io.connect('http://localhost:3000');
-            var timer;
-            var time;
-            var clockFlag = false;
-
-            if(clockFlag == false)
-                $('#time').text('Bidding has not Started');
-
-            function bidClock(){
-                timer = setInterval(function(){
-                          showTime()} , 1000);
-                }
-
-            function showTime(){
-                if(time > 0){
-                    $('#time').text(time + " seconds left")
-                    time -= 1;
-                }
-            }
-
-            socket.on('connect', function(data) {
-                socket.emit('join', "Connected to Server");
-            });
-
-            socket.on('assign', function(data){
-                client_id = data;
-            });
-
-            socket.on('initiate', function(data){
-                $("#bid_val").text( data.old );
-                $("#new_bid").text( data.new );
-                time = data.time;
-                if(data.flag === true && clockFlag === false)
-                    bidClock();
-            });
-
-
-            socket.on('update', function(data) {
-                $("#bid_val").text( data.old );
-                $("#new_bid").text( data.new );
-                time = data.time;
-                if(data.flag === true && clockFlag === false)
-                    bidClock();
-            });
-
-            socket.on('end', function(data){
-                if(client_id == data)
-                    window.alert('Bidding Ended\nCongrats You Won The Bidding');
-                else
-                    window.alert('Bidding Ended\nSorry You Lost The Bidding');
-                
-                clearInterval(timer);
-            })    
-
-            $('#send').submit(function() {
-                var new_bid = Number(document.getElementById("new_bid").innerHTML);
-                $('#new_bid').val('');
-                socket.emit('bid', {bid:new_bid, c_id:client_id});
-                return false;
-            });
-        </script>  
+        <script src="/js/client.js"></script>  
     </body>
  </html>  

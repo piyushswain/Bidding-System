@@ -1,0 +1,85 @@
+/*Universal*/
+*{
+	margin: 0;
+	padding: 0;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 2px solid #ccc;
+    padding: 0;
+}
+
+.product_name{
+	font-family: 'Patua One', cursive;
+	text-align: left;
+	font-size: 20px;
+	font-weight: bolder;
+	padding-top: 30px;
+	padding-bottom: 15px;
+	padding-left: 30px;
+
+}
+
+.bid_body{
+	font-family: 'Muli', sans-serif;
+	display: grid;
+	grid-template-columns: 50% auto;
+	padding-top: 50px;
+	padding-left: 50px;
+	padding-right: 50px;
+}
+
+.product_image{
+	padding-top: 50px;
+	display:table-cell;
+	vertical-align:middle;
+	text-align:center;
+}
+
+#p_img{
+	height: 350px;
+	width: 200px;
+}
+.product_desc{
+	display: block;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-radius: 20px;
+	text-align: left;
+	padding-left: 20px;
+	background: #efefef;
+}
+
+#bid_val,#old{
+	font-size: 44px;
+	font-weight: bold;
+	color: #6d6d6d;
+}
+
+#next,#new_bid,#new{
+	font-size:25px;
+}
+
+#button{
+	display: block;
+	border-radius: 30px;
+	font-size: 20px;
+	background: #000000;
+	color: #FFFFFF;
+	vertical-align: middle;
+	text-align: center;
+	margin-top: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#time{
+	margin-top: 10px;
+	font-size: 20px;
+	font-style: bold italic;
+}
