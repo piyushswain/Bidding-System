@@ -4,7 +4,7 @@ var timer;
 var time;
 var clockFlag = false;
 
-if(clockFlag == false)
+if(clockFlag === false)
     $('#time').text('Bidding has not Started');
 
 function bidClock(){
@@ -32,17 +32,25 @@ socket.on('initiate', function(data){
     $("#bid_val").text( data.old );
     $("#new_bid").text( data.new );
     time = data.time;
-    if(data.flag === true && clockFlag === false)
+    if(data.flag === true && clockFlag === false){
         bidClock();
+        clockFlag = true;
+    }
+    $('#p_name').text( data.item );
+    $('#p_img').attr('src', data.addr);
 });
 
 
 socket.on('update', function(data) {
     $("#bid_val").text( data.old );
     $("#new_bid").text( data.new );
+    clearInterval(timer);
     time = data.time;
-    if(data.flag === true && clockFlag === false)
+    bidClock();
+    if(data.flag === true && clockFlag === false){
         bidClock();
+        clockFlag = true;
+    }
 });
 
 socket.on('end', function(data){
