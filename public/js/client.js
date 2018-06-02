@@ -13,10 +13,10 @@ function bidClock(){
 
 function showTime(){
     if(time >= 0){
-        $('#time').text(time + " seconds left")
+        $('#time').text(time + " seconds left");
         time -= 1;
         if(time == 0)
-           $('#time').text("Bidding Complete") 
+           $('#time').text("Bidding Complete");
     }
 }
 
@@ -31,25 +31,24 @@ socket.on('assign', function(data){
 socket.on('initiate', function(data){
     $("#bid_val").text( data.old );
     $("#new_bid").text( data.new );
+    $('#p_name').text( data.name );
+    $('#p_img').attr('src', data.addr);
     time = data.time;
     if(data.flag === true && clockFlag === false){
         bidClock();
         clockFlag = true;
     }
-    $('#p_name').text( data.item );
-    $('#p_img').attr('src', data.addr);
+    
 });
 
 
 socket.on('update', function(data) {
     $("#bid_val").text( data.old );
     $("#new_bid").text( data.new );
-    clearInterval(timer);
     time = data.time;
-    bidClock();
     if(data.flag === true && clockFlag === false){
-        bidClock();
         clockFlag = true;
+        bidClock();
     }
 });
 
@@ -60,6 +59,8 @@ socket.on('end', function(data){
         window.alert('Bidding Ended\nSorry You Lost The Bidding');
                 
     clearInterval(timer);
+
+    timer = setTimeout(function(){window.alert('Loading Next Item')} , 5000);
 })    
 
 $('#send').submit(function() {
